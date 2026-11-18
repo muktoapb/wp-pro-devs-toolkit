@@ -27,7 +27,7 @@ class WPPDT_Updater {
 	 * @since 1.1.0
 	 * @var string
 	 */
-	const REPOSITORY = 'https://github.com/muktoapb/WP-Pro-Devs-Toolkit/';
+	const REPOSITORY = 'https://github.com/muktoapb/wp-pro-devs-toolkit/';
 
 	/**
 	 * Branch used as the update detection base.

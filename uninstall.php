@@ -14,6 +14,12 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
 
+// A different copy of the toolkit is still installed and running, so this is
+// a duplicate folder being deleted: keep the settings that copy uses.
+if ( defined( 'WPPDT_PLUGIN_FILE' ) && dirname( WPPDT_PLUGIN_FILE ) !== __DIR__ ) {
+	return;
+}
+
 delete_option( 'wppdt_enabled_modules' );
 delete_option( 'wppdt_mcp_settings' );
 delete_option( 'wppdt_mcp_audit' );

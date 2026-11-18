@@ -1,0 +1,14 @@
+# Files left out of the release zip (see .github/workflows/release-zip.yml).
+/.git
+/.github
+/.gitignore
+/.distignore
+/dist
+/node_modules
+/src
+/tests
+/bin
+/package.json
+/package-lock.json
+/composer.json
+/phpunit.xml

@@ -1,0 +1,40 @@
+# Attaches wp-pro-devs-toolkit.zip to the GitHub release of every version tag.
+#
+# The zip's top folder is always wp-pro-devs-toolkit/, so uploading it on a
+# site that already has the plugin offers "Replace current with uploaded"
+# instead of installing a second copy (GitHub's own "Source code" zip uses
+# wp-pro-devs-toolkit-X.Y.Z/, which WordPress treats as a different plugin).
+name: Release zip
+
+on:
+  push:
+    tags:
+      - 'v*'
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-zip-${{ github.ref_name }}
+
+jobs:
+  zip:
+    runs-on: ubuntu-latest
+    env:
+      TAG: ${{ github.ref_name }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build zip
+        run: |
+          mkdir -p dist/wp-pro-devs-toolkit
+          rsync -a --exclude-from=.distignore ./ dist/wp-pro-devs-toolkit/
+          cd dist && zip -qr wp-pro-devs-toolkit.zip wp-pro-devs-toolkit
+
+      - name: Attach to release
+        run: |
+          gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --title "$TAG" --generate-notes
+          gh release upload "$TAG" dist/wp-pro-devs-toolkit.zip --clobber
